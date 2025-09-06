@@ -54,7 +54,23 @@ const RecipeVideos: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {videos.map((video) => (
-              <div key={video.id} className="group cursor-pointer" onClick={() => setSelectedVideo(video.videoUrl)}>
+              <div 
+                key={video.id} 
+                className="group cursor-pointer" 
+                data-video="true"
+                onClick={() => {
+                  setSelectedVideo(video.videoUrl);
+                  // Rastrear clique no vídeo
+                  if (window.utmify && window.utmify.pixel) {
+                    window.utmify.pixel.track('VideoClick', {
+                      videoTitle: video.title,
+                      videoId: video.id,
+                      pageUrl: window.location.href,
+                      timestamp: new Date().toISOString()
+                    });
+                  }
+                }}
+              >
                 <div className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                   <img 
                     src={video.thumbnail} 
